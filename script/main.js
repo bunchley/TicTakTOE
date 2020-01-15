@@ -1,11 +1,11 @@
 "use strict";
-
+let gameWrapper = document.querySelector(".game-wrapper");
 //game board using module design pattern
-let gameBoard = (() => {
+let GameBoard = (() => {
   let _board = [];
   const createBoard = () => {
-    for (let i = 0; i < 3; i++) {
-      _board.push([" ", " ", " "]);
+    for (let i = 0; i < 9; i++) {
+      _board.push(" ");
     }
   };
   const showBoard = () => {
@@ -21,6 +21,23 @@ let gameBoard = (() => {
   };
 })();
 
-gameBoard.showBoard();
+const StartGame = (() => {
+  const listener = () => {
+    let boxes = document.querySelectorAll(".box");
+    boxes.forEach(box =>
+      box.addEventListener(
+        "click",
+        console.log("clicked box", ` ${box.getAttribute("data-name")}`)
+      )
+    );
+  };
+  return {
+    listener
+  };
+})();
+
+GameBoard.createBoard();
+GameBoard.showBoard();
+StartGame.listener();
 
 console.log("hey yo");
