@@ -16,28 +16,32 @@ let GameBoard = (() => {
   };
 
   return {
-    createBoard,
-    showBoard
+    // createBoard,
+    // showBoard
   };
 })();
 
-const StartGame = (() => {
-  const listener = () => {
-    let boxes = document.querySelectorAll(".box");
-    boxes.forEach(box =>
-      box.addEventListener(
-        "click",
-        console.log("clicked box", ` ${box.getAttribute("data-name")}`)
-      )
-    );
-  };
-  return {
-    listener
-  };
-})();
 
-GameBoard.createBoard();
-GameBoard.showBoard();
-StartGame.listener();
+let clickedBoxAction = (() => {
+  let boxes = document.querySelectorAll(".box");
+  boxes.forEach(box => {
+    box.addEventListener('click', () => {
+      console.log("clicked box", ` ${box.getAttribute("data-name")}`)
+      if(box.classList === 'selected'){
+
+      }
+      else{
+      box.textContent = 'x';
+      box.classList.add('selected');
+      }
+      
+    })
+  })
+}) ();
+
+
+// GameBoard.createBoard();
+// GameBoard.showBoard();
+
 
 console.log("hey yo");
