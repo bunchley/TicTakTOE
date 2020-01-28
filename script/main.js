@@ -1,5 +1,9 @@
 "use strict";
+let boxes = document.querySelectorAll(".box");
 let gameWrapper = document.querySelector(".game-wrapper");
+let playerButtonWrapper = document.querySelector(".player-wrapper");
+let playerVPlayer = document.querySelector(".player-player");
+let playerVComp = document.querySelector(".player-computer");
 //game board using module design pattern
 let GameBoard = (() => {
   let _board = [];
@@ -9,12 +13,10 @@ let GameBoard = (() => {
     }
   };
   const showBoard = () => {
-    let boxes = document.querySelectorAll(".box");
     for (let i = 0; i < 9; i++) {
       boxes[i].innerText = `${_board[i]}`;
     }
   };
-
   return {
     createBoard,
     showBoard
@@ -23,11 +25,11 @@ let GameBoard = (() => {
 
 const StartGame = (() => {
   const listener = () => {
-    let boxes = document.querySelectorAll(".box");
+    console.log("listening");
     boxes.forEach(box =>
       box.addEventListener(
         "click",
-        console.log("clicked box", ` ${box.getAttribute("data-name")}`)
+        console.log("clicked box", `${box.getAttribute("data-name")}`)
       )
     );
   };
@@ -36,8 +38,19 @@ const StartGame = (() => {
   };
 })();
 
-GameBoard.createBoard();
-GameBoard.showBoard();
-StartGame.listener();
+playerVComp.addEventListener("click", () => {
+  playerButtonWrapper.classList.add("invisible");
+  gameWrapper.classList.remove("invisible");
+  GameBoard.createBoard();
+  GameBoard.showBoard();
+  StartGame.listener();
+});
 
+playerVPlayer.addEventListener("click", () => {
+  playerButtonWrapper.classList.add("invisible");
+  gameWrapper.classList.remove("invisible");
+  GameBoard.createBoard();
+  GameBoard.showBoard();
+  StartGame.listener();
+});
 console.log("hey yo");
