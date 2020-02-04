@@ -149,6 +149,11 @@ let GameBoard = (() => {
   };
 })();
 
+const gameController = gameType => {
+  console.log("inside game controler__", gameType);
+  let playing;
+};
+
 playerVComp.addEventListener("click", () => {
   playerButtonWrapper.classList.add("invisible");
   gameText.textContent = "This functionality is still under construction";
@@ -156,14 +161,17 @@ playerVComp.addEventListener("click", () => {
   // GameBoard.createBoard();
   // GameBoard.showBoard();
   gameType = "computer";
+  gameController(gameType);
 });
 
 playerVPlayer.addEventListener("click", () => {
   playerButtonWrapper.classList.add("invisible");
   gameWrapper.classList.remove("invisible");
+  gameType = "players";
+  gameController(gameType);
   GameBoard.createBoard();
   GameBoard.showBoard();
-  gameType = "players";
+
   if (gameType === "players") {
     GameBoard.addListener(gameType);
   } else {
