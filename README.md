@@ -20,9 +20,11 @@ Build the logic that checks for when the game is over! - DONE
 
 Should check for 3-in-a-row and a tie. - DONE
 
-Clean up the interface to allow players to put in their names
+Clean up the interface to allow players to put in their names - DONE, also fixed state bug that was causing all sorts of issues. Need to read more about handling state.
 
-Include a button to start/restart the game and add a display element that congratulates the winning player!
+Include a button to start - DONE
+restart the game
+add a display element that congratulates the winning player!
 
 Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
 Start by just getting the computer to make a random legal move.

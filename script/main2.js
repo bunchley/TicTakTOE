@@ -4,15 +4,23 @@ const GameBoard = (() => {
   let boxes = document.querySelectorAll(".box");
   let _board = [];
   const createBoard = (gameOver) => {
-    for (let i = 0; i < 9; i++) {
-      //create gameboard
-      _board.push(" ");
-      if (gameOver === false) {
+    if (gameOver === false) {
+      for (let i = 0; i < 9; i++) {
+        //create gameboard
+        _board.push(" ");
         boxes[i].addEventListener("click", (e) => {
           console.log("addeventlistenter", i);
           GameController.playGame(e.target.id);
         });
       }
+    }
+    if (gameOver === true) {
+      _board.forEach(function (position, index) {
+        if (position === "X" || "O") {
+          _board[index] = " ";
+        }
+      });
+      console.log({ _board });
     }
   };
   const showBoard = () => {
@@ -99,6 +107,7 @@ const GameController = (() => {
   let gameBoard = document.querySelector(".game-wrapper");
   let formWrapper = document.getElementById("form");
   let startButtonWrapper = document.querySelector(".start-button");
+  const restartButtonWrapper = document.querySelector(".restart-button");
   let gameModeSelected;
   let gameOver;
   let firstPlayer1 = true;
@@ -153,26 +162,32 @@ const GameController = (() => {
   };
   let playGame = (position) => {
     console.log("playerMove", position);
-    if (gameOver) {
-      setup(gameOver);
-      return;
-    }
+    // if (gameOver) {
+    //   setup(gameOver);
+    //   return;
+    // }
     if (GameBoard.positionFreeCheck(position) === false) {
       return;
     }
     if (firstPlayer1) {
       player1.playerMove(position);
       if (GameBoard.winCheck(player1.symbol)) {
-        gameOver = true;
+        finish();
       }
       firstPlayer1 = false;
     } else {
       player2.playerMove(position);
       if (GameBoard.winCheck(player2.symbol)) {
-        gameOver = true;
+        finish();
       }
       firstPlayer1 = true;
     }
+  };
+  const finish = () => {
+    restartButtonWrapper.classList.remove("invisible");
+    gameOver = true;
+
+    setup(gameOver);
   };
   return {
     setPlayers,
