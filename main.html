@@ -12,9 +12,22 @@
       <h2 class='game-text'>Welcome</h2>
     </div>
     <div class="mode-wrapper">
-      <button class="mode-pvc">Player vs Computer</button>
-      <button class="mode-pvp">Player1 vs Player2</button>
-    </div>
+
+      <!-- <button class="mode-pvc">Player vs Computer</button>
+      <button class="mode-pvp">Player1 vs Player2</button> -->
+        <form id="form">
+          <label for="player1">Player 1</label>
+          <input type="text" id="player1" name="player1" placeholder="Your name...">
+          <label for="player2">Player 2</label>
+          <input type="text" id="player2" name="player2" placeholder="Leave blank to play against computer">
+          <button type="submit">Play</button>
+  
+        </form>
+      </div>
+      <div class='start-button invisible'>
+
+        <button type="start">Start</button>
+      </div>
     <div class="game-wrapper invisible">
       <div class="board-container">
     

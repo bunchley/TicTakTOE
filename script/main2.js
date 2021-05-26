@@ -7,7 +7,7 @@ const GameBoard = (() => {
     for (let i = 0; i < 9; i++) {
       //create gameboard
       _board.push(" ");
-      if (gameOver != true) {
+      if (gameOver === false) {
         boxes[i].addEventListener("click", (e) => {
           console.log("addeventlistenter", i);
           GameController.playGame(e.target.id);
@@ -82,7 +82,7 @@ const Player = function (name, symbol) {
   this.symbol = symbol;
   const playerMove = (position) => {
     if (position >= 0 && position < 9) {
-      // where you left off
+      console.log("determining update");
       GameBoard.update(position, symbol);
     }
   };
@@ -97,39 +97,62 @@ const Player = function (name, symbol) {
 const GameController = (() => {
   let modeWrapper = document.querySelector(".mode-wrapper");
   let gameBoard = document.querySelector(".game-wrapper");
+  let formWrapper = document.getElementById("form");
+  let startButtonWrapper = document.querySelector(".start-button");
   let gameModeSelected;
   let gameOver;
   let firstPlayer1 = true;
   let player1, player2;
+  let beginning = true;
+  let player1nam, player2nam;
 
-  let setPlayers = (gameModeSelected) => {
-    if (gameModeSelected === "playerVPlayer") {
-      player1 = new Player("Player 1", "X");
-      player2 = new Player("Player 2", "O");
-    } else if (gameModeSelected === "playerVComp") {
-      player1 = new Player("You", "X");
-      player2 = new Player("Computer", "O");
-    }
+  let setPlayers = (name1, name2) => {
+    player1 = new Player(name1, "X");
+    player2 = new Player(name2, "O");
+  };
+  let gameStart = () => {
+    formWrapper.addEventListener("submit", (e) => {
+      console.log("submitted");
+      player1nam = document.getElementById("player1").value;
+      player2nam = document.getElementById("player2").value;
+      if (player2nam === "") {
+        gameModeSelected = "playerVComp";
+        player2nam = "Computer";
+      } else {
+        gameModeSelected = "playerVPlayer";
+      }
+
+      console.log(beginning);
+      beginning = false;
+      console.log(player1nam, player2nam, gameModeSelected);
+      e.preventDefault();
+      formWrapper.classList.add("invisible");
+      startButtonWrapper.classList.remove("invisible");
+
+      gameMode();
+    });
   };
 
   let gameMode = () => {
-    modeWrapper.addEventListener("click", (e) => {
-      if (e.target.className === "mode-pvp") {
-        gameModeSelected = "playerVPlayer";
-      } else if (e.target.className === "mode-pvc") {
-        gameModeSelected = "playerVComp";
-      }
-      modeWrapper.classList.add("invisible");
+    if (beginning === true) {
+      return gameStart();
+    }
+    startButtonWrapper.addEventListener("click", (e) => {
+      console.log("inside");
+      startButtonWrapper.classList.add("invisible");
       gameBoard.classList.remove("invisible");
-      setPlayers(gameModeSelected);
+      setPlayers(player1nam, player2nam);
+
       setup(false);
+      e.preventDefault();
     });
   };
   let setup = (gameOver) => {
-    GameBoard.createBoard(gameBoard);
+    GameBoard.createBoard(gameOver);
     GameBoard.showBoard();
   };
   let playGame = (position) => {
+    console.log("playerMove", position);
     if (gameOver) {
       setup(gameOver);
       return;
