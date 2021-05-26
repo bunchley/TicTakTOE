@@ -188,12 +188,22 @@ const GameController = (() => {
     gameOver = true;
 
     setup(gameOver);
+    restartButtonWrapper.addEventListener("click", (e) => {
+      console.log("in the restart");
+      gameOver = false;
+      beginning = true;
+      formWrapper.classList.remove("invisible");
+      restartButtonWrapper.classList.add("invisible");
+      gameBoard.classList.add("invisible");
+      gameMode();
+    });
   };
   return {
     setPlayers,
     gameMode,
     setup,
     playGame,
+    finish,
   };
 })();
 
