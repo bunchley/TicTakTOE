@@ -9,7 +9,6 @@ const GameBoard = (() => {
         //create gameboard
         _board.push(" ");
         boxes[i].addEventListener("click", (e) => {
-          console.log("addeventlistenter", i);
           GameController.playGame(e.target.id);
         });
       }
@@ -20,7 +19,6 @@ const GameBoard = (() => {
           _board[index] = " ";
         }
       });
-      console.log({ _board });
     }
   };
   const showBoard = () => {
@@ -31,7 +29,6 @@ const GameBoard = (() => {
   const update = (position, symbol) => {
     _board[position] = symbol;
     showBoard();
-    console.log("updating the game board", _board[position]);
   };
   const winCheck = (playerSymbol) => {
     if (
@@ -67,9 +64,7 @@ const GameBoard = (() => {
   let positionFreeCheck = (position) => {
     const spotPlayed = document.getElementById(position);
     const text = spotPlayed.textContent || spotPlayed.innerText;
-    console.log("text", text);
     if (text === "X" || text === "O") {
-      console.log("made it here");
       return false;
     } else {
       return true;
@@ -90,7 +85,6 @@ const Player = function (name, symbol) {
   this.symbol = symbol;
   const playerMove = (position) => {
     if (position >= 0 && position < 9) {
-      console.log("determining update");
       GameBoard.update(position, symbol);
     }
   };
@@ -98,12 +92,14 @@ const Player = function (name, symbol) {
   return {
     name,
     symbol,
+
     playerMove,
   };
 };
 
 const GameController = (() => {
   let modeWrapper = document.querySelector(".mode-wrapper");
+  const gameTextWrapper = document.querySelector(".game-text");
   let gameBoard = document.querySelector(".game-wrapper");
   let formWrapper = document.getElementById("form");
   let startButtonWrapper = document.querySelector(".start-button");
@@ -113,7 +109,6 @@ const GameController = (() => {
   let firstPlayer1 = true;
   let player1, player2;
   let beginning = true;
-  let player1nam, player2nam;
 
   let setPlayers = (name1, name2) => {
     player1 = new Player(name1, "X");
@@ -122,8 +117,8 @@ const GameController = (() => {
   let gameStart = () => {
     formWrapper.addEventListener("submit", (e) => {
       console.log("submitted");
-      player1nam = document.getElementById("player1").value;
-      player2nam = document.getElementById("player2").value;
+      let player1nam = document.getElementById("player1").value;
+      let player2nam = document.getElementById("player2").value;
       if (player2nam === "") {
         gameModeSelected = "playerVComp";
         player2nam = "Computer";
@@ -131,7 +126,9 @@ const GameController = (() => {
         gameModeSelected = "playerVPlayer";
       }
 
-      console.log(beginning);
+      setPlayers(player1nam, player2nam);
+      console.log(player1.name, player2.name);
+
       beginning = false;
       console.log(player1nam, player2nam, gameModeSelected);
       e.preventDefault();
@@ -147,10 +144,8 @@ const GameController = (() => {
       return gameStart();
     }
     startButtonWrapper.addEventListener("click", (e) => {
-      console.log("inside");
       startButtonWrapper.classList.add("invisible");
       gameBoard.classList.remove("invisible");
-      setPlayers(player1nam, player2nam);
 
       setup(false);
       e.preventDefault();
@@ -162,48 +157,50 @@ const GameController = (() => {
   };
   let playGame = (position) => {
     console.log("playerMove", position);
-    // if (gameOver) {
-    //   setup(gameOver);
-    //   return;
-    // }
+    if (gameOver) {
+      console.log("game over is true");
+      setup(gameOver);
+      restartButtonWrapper.classList.remove("invisible");
+      restartButtonWrapper.addEventListener("click", (e) => {
+        gameOver = false;
+        beginning = true;
+        formWrapper.classList.remove("invisible");
+        restartButtonWrapper.classList.add("invisible");
+        gameBoard.classList.add("invisible");
+        gameTextWrapper.innerHTML = "Welcome Back";
+        setup(true);
+        gameMode();
+      });
+    }
     if (GameBoard.positionFreeCheck(position) === false) {
       return;
     }
     if (firstPlayer1) {
       player1.playerMove(position);
+      gameTextWrapper.innerHTML = `${player2.name}'s turn!`;
       if (GameBoard.winCheck(player1.symbol)) {
-        finish();
+        console.log("win check player 1", player1.name);
+        gameTextWrapper.innerHTML = `${player1.name} Wins!`;
+        gameOver = true;
       }
       firstPlayer1 = false;
     } else {
       player2.playerMove(position);
+      gameTextWrapper.innerHTML = `${player1.name}'s turn!`;
       if (GameBoard.winCheck(player2.symbol)) {
-        finish();
+        console.log("win check player 2", player2.name);
+        gameTextWrapper.innerHTML = `${player2.name} Wins!`;
+        gameOver = true;
       }
       firstPlayer1 = true;
     }
   };
-  const finish = () => {
-    restartButtonWrapper.classList.remove("invisible");
-    gameOver = true;
 
-    setup(gameOver);
-    restartButtonWrapper.addEventListener("click", (e) => {
-      console.log("in the restart");
-      gameOver = false;
-      beginning = true;
-      formWrapper.classList.remove("invisible");
-      restartButtonWrapper.classList.add("invisible");
-      gameBoard.classList.add("invisible");
-      gameMode();
-    });
-  };
   return {
     setPlayers,
     gameMode,
     setup,
     playGame,
-    finish,
   };
 })();
 
